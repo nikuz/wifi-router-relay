@@ -31,7 +31,7 @@ void Led::control() {
     bool isOn = Relay::isOn();
     bool isLeetcodePassGranted = Leetcode::isPassGranted();
     bool isTimeBeforeSleep = AppTime::isTimeBeforeSleep(isLeetcodePassGranted);
-
+    
     CRGB::HTMLColorCode onColor = isLeetcodePassGranted ? CRGB::Purple : CRGB::Green;
     CRGB::HTMLColorCode offColor = CRGB::Red;
 
@@ -44,7 +44,7 @@ void Led::control() {
         }
     }
 
-    if (isOn && !isLeetcodePassGranted) {
+    if (!isOn && !isLeetcodePassGranted) {
         setColor(offColor);
     } else {
         setColor(onColor);
