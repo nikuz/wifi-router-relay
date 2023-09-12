@@ -1,11 +1,11 @@
 #define RELAY_PIN                       0
 
-#define OFF_HOUR                        21
+#define OFF_HOUR                        19
 #define ON_HOUR                         6
 #define OFF_NOTIFICATION_MINUTES        10
 
 #define LEETCODE_USER                   "nikuz"
-#define LEETCODE_EXTRA_HOURS            1
+#define LEETCODE_EXTRA_HOURS            2
 
 #define LED_PIN                         2
 #define LED_AMOUNT                      1
