@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
+#include <WiFiClientSecureBearSSL.h>
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
-#include <Arduino_JSON.h>
 #include <Preferences.h>
 
 #include "def.h"
@@ -24,32 +24,22 @@ void Leetcode::obtainStats() {
         return;
     }
 
-    String requestUrl = "http://leetcode-stats-api.herokuapp.com/" + String(LEETCODE_USER);
+    std::unique_ptr<BearSSL::WiFiClientSecure>client(new BearSSL::WiFiClientSecure);
 
-    WiFiClient client;
+    client->setInsecure();
     HTTPClient http;
         
-    http.begin(client, requestUrl);
-
-    http.addHeader("Content-Type", "application/json");
+    http.begin(*client, LEETCODE_SYNC_URL);
 
     int httpResponseCode = http.GET();
+    Serial.print("Response code: ");
+    Serial.println(httpResponseCode);
 
     if (httpResponseCode > 0) {
         String payload = http.getString();
-        JSONVar response = JSON.parse(payload);
+        Serial.println(payload);
 
-        if (JSON.typeof(response) == "undefined") {
-            Serial.println("Leetcode: Parsing input failed!");
-            return;
-        }
-
-        if (String(response["status"]) != "success") {
-            Serial.println("Leetcode: Failed to retrieve stats");
-            return;
-        }
-
-        int counter = int(response["totalSolved"]);
+        int counter = payload.toInt();
         Serial.print("Leetcode: ");
         Serial.println(counter);
         Leetcode::storeCounterIfAbsent(counter);

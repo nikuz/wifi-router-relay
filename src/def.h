@@ -4,8 +4,9 @@
 #define ON_HOUR                         6
 #define OFF_NOTIFICATION_MINUTES        10
 
+#define LEETCODE_SYNC_URL               "https://ruby-cheerful-spider.cyclic.app/total-solved"
 #define LEETCODE_USER                   "nikuz"
-#define LEETCODE_EXTRA_HOURS            2
+#define LEETCODE_EXTRA_HOURS            4
 
 #define LED_PIN                         2
 #define LED_AMOUNT                      1

@@ -3,3 +3,4 @@
 .idea/
 *Def.h
 !def.h
+.DS_Store
