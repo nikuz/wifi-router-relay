@@ -5,8 +5,6 @@
 #include "Led.h"
 #include "Relay.h"
 
-unsigned long delayInterval = 1000 * 60; // one minute
-
 void setup() {
     Serial.begin(SERIAL_BAUD);
 
@@ -14,20 +12,25 @@ void setup() {
     Relay::on();
 
     Led::init();
+
+    AppWiFi::connect();
+    AppTime::config();
+    AppWiFi::disconnect();
 }
 
 void loop() {
     bool isOn = Relay::isOn();
+    bool isLeetcodePassGranted = Leetcode::isPassGranted();
 
-    if (isOn) {
+    AppTime::printLocalTime();
+
+    if (isOn && !isLeetcodePassGranted) {
         AppWiFi::connect();
-        AppTime::obtainInternetTime();
         Leetcode::obtainStats();
         AppWiFi::disconnect();
     }
 
     bool isTimeToSleep = AppTime::isTimeToSleep();
-    bool isLeetcodePassGranted = Leetcode::isPassGranted();
     
     if (isTimeToSleep && isOn && !isLeetcodePassGranted) {
         Relay::off();
@@ -38,5 +41,5 @@ void loop() {
     Led::control();
     Leetcode::storeCounter(isLeetcodePassGranted);
 
-    delay(delayInterval);
+    delay(AppTime::getDelay(isLeetcodePassGranted));
 }

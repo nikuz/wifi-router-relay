@@ -9,11 +9,15 @@ public:
 
     ~AppTime();
 
-    static void obtainInternetTime();
+    static void config();
+
+    static void printLocalTime();
 
     static bool isTimeToSleep();
 
     static bool isTimeBeforeSleep(bool leetcodePassGranted);
+
+    static unsigned long getDelay(bool leetcodePassGranted);
 };
 
 #endif /* AppTime_h */

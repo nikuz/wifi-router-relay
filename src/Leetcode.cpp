@@ -32,15 +32,12 @@ void Leetcode::obtainStats() {
     http.begin(*client, LEETCODE_SYNC_URL);
 
     int httpResponseCode = http.GET();
-    Serial.print("Response code: ");
-    Serial.println(httpResponseCode);
 
     if (httpResponseCode > 0) {
         String payload = http.getString();
-        Serial.println(payload);
 
         int counter = payload.toInt();
-        Serial.print("Leetcode: ");
+        Serial.print("Leetcode problems counter: ");
         Serial.println(counter);
         Leetcode::storeCounterIfAbsent(counter);
     }
