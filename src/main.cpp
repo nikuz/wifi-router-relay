@@ -19,27 +19,30 @@ void setup() {
 }
 
 void loop() {
-    bool isOn = Relay::isOn();
-    bool isLeetcodePassGranted = Leetcode::isPassGranted();
-
     AppTime::printLocalTime();
 
-    if (isOn && !isLeetcodePassGranted) {
+    bool isOn = Relay::isOn();
+    bool leetcodePassGranted = Leetcode::isPassGranted();
+
+    // request leetcode stats if pass is not granted yet
+    if (isOn && !leetcodePassGranted) {
         AppWiFi::connect();
         Leetcode::obtainStats();
         AppWiFi::disconnect();
     }
 
+    // store counter in local storage and reset leetcode pass
+    Leetcode::storeCounter(leetcodePassGranted);
+    leetcodePassGranted = Leetcode::isPassGranted();
+
     bool isTimeToSleep = AppTime::isTimeToSleep();
     
-    if (isTimeToSleep && isOn && !isLeetcodePassGranted) {
+    if (isTimeToSleep && isOn && !leetcodePassGranted) {
         Relay::off();
     } else if (!isTimeToSleep && !isOn) {
         Relay::on();
     }
 
-    Led::control();
-    Leetcode::storeCounter(isLeetcodePassGranted);
-
-    delay(AppTime::getDelay(isLeetcodePassGranted));
+    Led::control(leetcodePassGranted);
+    delay(AppTime::getDelay(leetcodePassGranted));
 }

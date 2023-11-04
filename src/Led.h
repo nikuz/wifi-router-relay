@@ -11,7 +11,7 @@ public:
 
     static void init();
 
-    static void control();
+    static void control(bool leetcodePassGranted);
 };
 
 #endif /* Led_h */

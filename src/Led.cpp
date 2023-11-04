@@ -5,7 +5,6 @@
 #include "Led.h"
 #include "Relay.h"
 #include "AppTime.h"
-#include "Leetcode.h"
 
 CRGB leds[LED_AMOUNT];
 
@@ -27,12 +26,11 @@ void Led::init() {
     FastLED.addLeds<LED_CHIPSET, LED_PIN, LED_COLOR_ORDER>(leds, LED_AMOUNT).setCorrection(TypicalLEDStrip);
 }
 
-void Led::control() {
+void Led::control(bool leetcodePassGranted) {
     bool isOn = Relay::isOn();
-    bool isLeetcodePassGranted = Leetcode::isPassGranted();
-    bool isTimeBeforeSleep = AppTime::isTimeBeforeSleep(isLeetcodePassGranted);
+    bool isTimeBeforeSleep = AppTime::isTimeBeforeSleep(leetcodePassGranted);
     
-    CRGB::HTMLColorCode onColor = isLeetcodePassGranted ? CRGB::Purple : CRGB::Green;
+    CRGB::HTMLColorCode onColor = leetcodePassGranted ? CRGB::Purple : CRGB::Green;
     CRGB::HTMLColorCode offColor = CRGB::Red;
 
     if (isTimeBeforeSleep) {
@@ -44,7 +42,7 @@ void Led::control() {
         }
     }
 
-    if (!isOn && !isLeetcodePassGranted) {
+    if (!isOn && !leetcodePassGranted) {
         setColor(offColor);
     } else {
         setColor(onColor);

@@ -55,11 +55,11 @@ bool AppTime::isTimeBeforeSleep(bool leetcodePassGranted) {
 }
 
 unsigned long AppTime::getDelay(bool leetcodePassGranted) {
-    unsigned long oneMinuteDelay = 1000 * 60;
     struct tm timeinfo;
 
     if (!getLocalTime(&timeinfo)) {
         Serial.println("Failed to obtain time");
+        unsigned long oneMinuteDelay = 1000 * 60;
         return oneMinuteDelay;
     }
 
@@ -69,12 +69,12 @@ unsigned long AppTime::getDelay(bool leetcodePassGranted) {
     }
 
     bool lastHour = timeinfo.tm_hour == hourTarget - 1;
-    if (lastHour) {
-        return oneMinuteDelay;
-    }
+    unsigned long minutes = (60 - timeinfo.tm_min) * 60 * 1000;
+    unsigned long seconds = (60 - timeinfo.tm_sec) * 1000;
 
-    int minutes = (60 - timeinfo.tm_min) * 60 * 1000;
-    int seconds = (60 - timeinfo.tm_sec) * 1000;
+    if (lastHour) {
+        return seconds + 1000;
+    }
 
     return minutes + seconds + 1000;
 }
